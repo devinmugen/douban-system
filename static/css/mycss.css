@@ -1,0 +1,121 @@
+.mybigstar {
+    background-image:url('/uploads/stars.png');
+    width: 150px;
+    height: 30px;
+    margin: 1px 0 0 0;
+    overflow: hidden;
+}
+
+.mybigstar10 {
+    background-position: 0 0px;
+}
+
+.mybigstar9 {
+    background-position: 0 -30px;
+}
+
+.mybigstar8 {
+    background-position: 0 -60px;
+}
+
+.mybigstar7 {
+    background-position: 0 -90px;
+}
+
+.mybigstar6 {
+    background-position: 0 -120px;
+}
+
+.mybigstar5 {
+    background-position: 0 -150px;
+}
+
+.mybigstar4 {
+    background-position: 0 -180px;
+}
+
+.mybigstar3 {
+    background-position: 0 -210px;
+}
+
+.mybigstar2 {
+    background-position: 0 -240px;
+}
+
+.mybigstar1 {
+    background-position: 0 -270px;
+}
+
+.mybigstar0 {
+    background-position: 0 -300px;
+}
+
+
+.stars input {
+    display: none;
+}
+
+.stars label {
+    float: right;
+    /* 假如点击三颗星，从左边开始点 */
+    color: gainsboro;
+    font-size: 35px;
+    margin: 0 5px;
+    text-shadow: 1px 1px #bbb;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.stars label::before {
+    content: '★';
+}
+
+.stars input:checked~label {
+    color: yellow;
+    text-shadow: 1px 1px #c60;
+}
+
+
+
+.stars .star_result::before {
+    content: '';
+    left: 50%;
+    bottom: 300px;
+    font-size: 30px;
+    color: gold;
+    display: none;
+    margin-left: 20px;
+}
+
+.stars input:checked~.star_result::before {
+    display: block;
+}
+
+.stars #five:checked~.star_result::before {
+    content: "i love it";
+}
+
+.stars #four:checked~.star_result::before {
+    content: 'i like it';
+}
+
+.stars #three:checked~.star_result::before {
+    content: 'it is good';
+}
+
+.stars #two:checked~.star_result::before {
+    content: 'i do not like it';
+}
+
+.stars #one:checked~.star_result::before {
+    content: 'i hate it';
+}
+
+.starstar {
+    color: #e05dad !important
+}
+
+.stars:not(:checked)>label:hover,
+.stars:not(:checked)>label:hover~label {
+    color: yellow !important;
+}

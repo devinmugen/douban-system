@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>douban profile</title>
+    <!--    <link rel="stylesheet" href="/static/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/mycss.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/doubandetail.css">
+    <link rel="stylesheet" href="/static/css/doubanbase.css">
+    <link rel="stylesheet" href="/static/lib/editor/editor.css">
+    <link rel="stylesheet" href="/static/lib/webuploader/webuploader.css">
+    <script src="/static/lib/jquery-3.0.0.min.js"></script>
+    <script src="/static/lib/markdownit.js"></script>
+    <script src="/static/lib/webuploader/webuploader.withoutimage.js"></script>
+    <script src="/static/lib/editor/editor.js"></script>
+    <script src="/static/lib/editor/ext.js"></script>
+
+    <style type="text/css">
+        .bigtest {
+            font-size: 24px !important;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="main">
+    <div id="content">
+        <div class='panel'>
+            <div class="header">
+                <a href="/" class="topic-tab current-tab" style="float: right">
+                    登录注册
+                </a>
+                <a href="http://127.0.0.1:5000" class="topic-tab current-tab" style="float: right">
+                    聊天室
+                </a>
+                <a href="/mail" class="topic-tab current-tab" style="float: right">
+                    邮件
+                </a>
+            </div>
+            <div class="header">
+                <a href="/topic"
+                   class="topic-tab current-tab">
+                    首页
+                </a>
+            </div>
+            <h1> 个人信息 </h1>
+            <!---->
+            <div class="subjectwrap clearfix">
+                <div class="subject clearfix">
+                    <div id="mainpic" class="">
+                        <a class="nbgnbg" href="{{ '/uploads/head/' + user.user_image}}"
+                           title="查看图片">
+                            <img src="{{ '/uploads/head/' + user.user_image}}"
+                                 title="{{ user.username }}"/>
+                        </a>
+                    </div>
+
+
+                    <div id="info" class="bigtest">
+                        <div class='pl bigtest' style="font: 24px !important">
+                            <div>
+                                user id: {{ user.id }}
+                            </div>
+                            <div>
+                                username: {{ user.username }}
+                            </div>
+                            <br>
+                            <div>
+                                created time:
+                                <br>
+                                {{ user.get_created_time() }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--                -->
+                <div class="bigtest {{ hide }}" style="float:left">
+                    <h2>更新头像</h2>
+                    <form method=post action="{{ url_for('.add_img') }}" enctype=multipart/form-data>
+                        <input type=file name=file>
+                        <input type=submit value=Upload>
+                    </form>
+                </div>
+                <div class="{{ hide_mail }}"style="float: left">
+                    <h2>发送邮件✉️️</h2>
+                    <form method="post" action="{{ url_for('mail.add') }}">
+                        <input type="text" name="content" placeholder="content">
+                        <input type="text" name="title" placeholder="title">
+                        <input type="hidden" name="receiver_id" placeholder="to_id" value="{{ user.id }}">
+                        <button type="submit">提交邮件</button>
+                    </form>
+                </div>
+                <!--                -->
+            </div>
+        </div>
+
+        <div class='panel'>
+            <div class='header'>
+            <span class='col_fade'>
+                <!-- 过滤器 -->
+                {{ user.user_collect() | count }}想看
+                {{ user.user_star() | count }} 评价
+            </span>
+            </div>
+            <div class=obssin>
+                <div class="bigtest">想看</div>
+                <ul>
+                    {% for t in ts %}
+                    <li class="aob">
+                        <a href="{{ url_for('topic.detail', id=t.id) }}" title="{{ t.title }}" target="_blank">
+                            <img
+                                src="{{ '/uploads/' + t.cover_img() }}"
+                                class="climg" alt="{{ t.title }}"/>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <div class=obssin>
+                <div class="bigtest">评价</div>
+                <ul>
+                    {% for t in ss %}
+                    <li class="aob">
+                        <a href="{{ url_for('topic.detail', id=t.id) }}" title="{{ t.title }}" target="_blank">
+                            <img
+                                src="{{ '/uploads/' + t.cover_img() }}"
+                                class="climg" alt="{{ t.title }}"/>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="clear"></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

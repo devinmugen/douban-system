@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>douban</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/mycss.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/doubandetail.css">
+    <link rel="stylesheet" href="/static/lib/editor/editor.css">
+    <link rel="stylesheet" href="/static/lib/webuploader/webuploader.css">
+    <script src="/static/lib/jquery-3.0.0.min.js"></script>
+    <script src="/static/lib/markdownit.js"></script>
+    <script src="/static/lib/webuploader/webuploader.withoutimage.js"></script>
+    <script src="/static/lib/editor/editor.js"></script>
+    <script src="/static/lib/editor/ext.js"></script>
+
+    <style type="text/css">
+        .bigtest {
+            font-size: 16px !important;
+        }
+    </style>
+
+</head>
+<body>
+<div id="main">
+    <div id="content">
+        <div class='panel'>
+            <div class="header">
+                <a href="/topic"
+                   class="topic-tab current-tab">
+                    首页
+                </a>
+            </div>
+            <h1> {{ topic.title }} </h1>
+            <!---->
+            <div class="subjectwrap clearfix">
+                <div class="subject clearfix">
+                    <div id="mainpic" class="">
+                        <a class="nbgnbg" href="{{ topic.url }}"
+                           title="点击跳转到豆瓣">
+                            <img src="{{ '/uploads/' + topic.cover_img() }}"
+                                 title="{{ topic.title }}" alt="topic.title" rel="v:image"/>
+                        </a>
+                    </div>
+
+
+                    <div id="info" class="bigtest">
+                        <span class='pl bigtest'>导演</span>: <span class='attrs'>
+                            {% for t in topic.directors %}
+                                {{ t }}
+                            {% endfor %}
+                        </span>
+                        <br/>
+                        <span class="actor"><span class='pl bigtest'>主演</span>: <span class='attrs'>
+                            {% for t in topic.casts %}
+                                {{ t }}
+                            {% endfor %}
+                        </span>
+                        </span>
+                        <br/>
+                        <span class="pl bigtest">类型:</span>
+                            {% for b in topic.board() %}
+                                <a href="/topic?board_id={{ b.id }}">
+                                    {{ b.title }}
+                                </a>
+                            {% endfor %}
+                        <br/>
+                    </div>
+                    <br>
+                    <div style="float:left" class="bigtest">
+                        <div style="color: #8787d8">豆瓣评分: {{ topic.rate }}</div>
+                        <div class="ll mybigstar {{ topic.bouban_rate() }}"></div>
+                    </div>
+                </div>
+            <!--            -->
+                <div  style="float:left">
+                    <h2>你的评价</h2>
+                    <form action="{{ url_for('score.add') }}" method="post" class="stars">
+                        <!-- 这几个input的name值一定要相等，才能保持五个钮，每次只能点一个，达到单选的效果  -->
+                        <input type="radio" id="five" value="5" name="grade">
+                        <label for="five"  class="{{ s5 }}"></label>
+                        <input type="radio" id="four" value="4" name="grade">
+                        <label for="four" class="{{ s4 }}"></label>
+                        <input type="radio" id="three" value="3" name="grade">
+                        <label for="three" class="{{ s3 }}"></label>
+                        <input type="radio" id="two" value="2" name="grade">
+                        <label for="two" class="{{ s2 }}"></label>
+                        <input type="radio" id="one" value="1" name="grade">
+                        <label for="one" class="{{ s1 }}"></label>
+                        <div class="star_result" style="height: 40px"></div>
+                        <input type="hidden" name="topic_id" value="{{ topic.id }}">
+                        <button class="btn btn-info btn-sm" style="margin-top: 36px">更新评价</button>
+                    </form>
+                </div>
+                <div style="float:left">
+                    <h2>
+                        {{ collect_or_not }}
+                    </h2>
+                    <form action="{{ url_for('collect.add') }}" method="post">
+                        <input type="hidden" name="topic_id" value="{{ topic.id }}">
+                        <button class="btn btn-success btn-sm {{ collect_add }}">添加收藏</button>
+                    </form>
+                    <form action="{{ url_for('collect.delete') }}" method="post">
+                        <input type="hidden" name="topic_id" value="{{ topic.id }}">
+                        <button class="btn btn-success btn-sm {{ collect_hide }}">删除收藏</button>
+                    </form>
+                </div>
+            </div>
+            <!--            -->
+
+            <div class='header topic_header'>
+                <div class="changes">
+                    <span>
+          	            {{ topic.views }} 次浏览
+        	        </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='panel'>
+        <div class='header'>
+            <span class='col_fade'>
+                <!-- 过滤器 -->
+                {{ topic.replies() | count }} 短评
+            </span>
+        </div>
+        {% for r in topic.replies() %}
+        <div class='cell reply_area reply_item'>
+            <div class='author_content'>
+                <a href="{{ url_for('index.profile', id=r.user().id) }}" class="user_avatar">
+                    <img src="{{ '/uploads/head/' + r.user().user_image}}"
+                         title="{{ r.user().username }}"/>
+                </a>
+                <div class='user_info'>
+                    <a href="{{ url_for('index.profile', id=r.user().id) }}" class='dark reply_author'>
+                        {{ r.user().username }}
+                    </a>
+                    <a class="reply_time">
+                        {{ loop.index }}楼 • {{ r.get_created_time() }}
+                    </a>
+                </div>
+                <div class='user_action'>
+                    <span>
+                        <i class="fa up_btn
+                          fa-thumbs-o-up
+                          invisible" title="喜欢"></i>
+                        <span class="up-count">
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class='reply_content from-leiwei1991'>
+                <div class="markdown-text">
+                    {{ r.content }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div>
+            <form action="{{ url_for('reply.add') }}" method="post">
+                <input type="hidden" name="topic_id" value="{{ topic.id }}">
+                <textarea name="content"></textarea>
+                <button>添加短评</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

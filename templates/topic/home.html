@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>douban</title>
+<!--    <link rel="stylesheet" href="/static/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/douban.css">
+    <link rel="stylesheet" href="/static/lib/editor/editor.css">
+    <link rel="stylesheet" href="/static/lib/webuploader/webuploader.css">
+    <script src="/static/lib/jquery-3.0.0.min.js"></script>
+    <script src="/static/lib/markdownit.js"></script>
+    <script src="/static/lib/webuploader/webuploader.withoutimage.js"></script>
+    <script src="/static/lib/editor/editor.js"></script>
+    <script src="/static/lib/editor/ext.js"></script>
+</head>
+<body>
+<div id="main">
+    <div id="sidebar">
+        <div class="panel">
+<!--            <div class="inner">-->
+<!--                <a href="/topic/new" class="create_topic_btn">-->
+<!--                    <span class="span-success">发布话题</span>-->
+<!--                </a>-->
+<!--            </div>-->
+        </div>
+        <div class="panel">
+            <div class="inner">
+                <a href="{{ url_for('index.profile', id=user.id) }}" class="create_topic_btn">
+                    <span class="span-success">个人信息</span>
+                </a>
+                <div>
+                    {{ user.username }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="panel">
+            <div class="header">
+                <a href="/" class="topic-tab current-tab" style="float: right">
+                    登录注册
+                </a>
+                <a href="http://127.0.0.1:5000" class="topic-tab current-tab" style="float: right">
+                    聊天室
+                </a>
+                <a href="/mail" class="topic-tab current-tab" style="float: right">
+                    邮件
+                </a>
+            </div>
+            <br><br>
+            <div class="header">
+                <a href="/topic"
+                   class="topic-tab current-tab">
+                    全部
+                </a>
+
+                {% for b in bs %}
+                <a href="/topic?board_id={{ b.id }}"
+                   class="topic-tab current-tab">
+                    {{ b.title }}
+                </a>
+                {% endfor %}
+            </div>
+            <div class="gaia">
+                <div class="list-wp">
+                    <div class="list">
+                    {% for t in ms %}
+                        <a class="item" target="_blank"  style="float: left"
+                                         href="{{ url_for('topic.detail', id=t.id) }}">
+
+                            <div class="cover-wp">
+                                <img src="{{ '/uploads/' + t.cover_img() }}"
+                                     alt="{{ t.title }}" class="img-responsive">
+
+                            </div>
+                            <p>
+                                {{ t.title }}
+
+                                <span>( {{ t.replies() | count }} / {{ t.views }} )</span>
+                            </p>
+                        </a>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center">
+                {{ pagination.links }}
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+  (function () {
+    var editor = new Editor();
+    editor.render($('.editor')[0]);
+  })();
+    </script>
+
+</body>
+
+</html>
+
