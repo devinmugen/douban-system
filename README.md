@@ -1,6 +1,6 @@
 # 模仿豆瓣系统 douban-system
 
-### Link: http://douban.readbuild.xyz or http://141.164.49.199:2000/topic/
+### Link: https://readbuild.xyz/topic/
 
 注意 `pymongo` 的版本是 `3.9.0`
 
